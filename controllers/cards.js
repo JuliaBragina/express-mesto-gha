@@ -3,7 +3,7 @@ const { BAD_REQUEST, NOT_FOUND, SERVER_ERROR } = require('../utils/errorCodes');
 
 const getCards = (req, res) => {
   Card.find({})
-    .then((cards) => res.status(200).send(cards))
+    .then((cards) => res.send(cards))
     .catch(() => res.status(SERVER_ERROR).send({ message: 'Произошла ошибка на стороне сервера.' }));
 };
 
@@ -29,7 +29,7 @@ const deleteCard = (req, res) => {
         res.status(NOT_FOUND).send({ message: `Карточка с ${cardId} не найдена.` });
         return;
       }
-      res.status(200).send({ message: 'Карточка удалена.' });
+      res.send({ message: 'Карточка удалена.' });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -49,7 +49,7 @@ const likeCard = (req, res) => {
         res.status(NOT_FOUND).send({ message: `Карточка с ${cardId} не найдена.` });
         return;
       }
-      res.status(200).send(card);
+      res.send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -69,7 +69,7 @@ const dislikeCard = (req, res) => {
         res.status(NOT_FOUND).send({ message: `Карточка с ${cardId} не найдена.` });
         return;
       }
-      res.status(200).send(card);
+      res.send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
