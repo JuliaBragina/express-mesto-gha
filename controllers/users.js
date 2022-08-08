@@ -33,7 +33,7 @@ const createUser = (req, res, next) => {
       User.create({
         name, about, avatar, email, password: hash,
       })
-        .then((user) => res.status(201).send(user))
+        .then((user) => res.status(201).send({ name: user.name, about: user.about, avatar: user.avatar, email: user.email, _id: user._id }))
         .catch((err) => {
           if (err.code === 11000) {
             next(new ConflictError('Пользователь с такими данными уже существует.'));
@@ -86,7 +86,7 @@ const login = (req, res, next) => {
           return next(new UnauthorizedError('Неверные логин или пароль'));
         }
         const token = jwt.sign({ id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-        return res.cookie('jwt', token, { maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: true }).send({user});
+        return res.cookie('jwt', token, { maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: true }).send(user);
       });
     })
     .catch(next);
