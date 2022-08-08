@@ -1,5 +1,5 @@
-const avatarRegExp = new RegExp(/^(https?):\/\/(www.)?([-.~:\/?#\[\]@!$&'()*\+,;=\w])+$/);
+const avatarRegExp = /^(https?):\/\/(www.)?([-.~:/?#[\]@!$&'()*+,;=\w])+$/;
 
 module.exports = {
   avatarRegExp,
-}
+};

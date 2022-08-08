@@ -29,15 +29,15 @@ const userSchema = new mongoose.Schema({
     validate: {
       validator(v) {
         return validator.isEmail(v);
-      }
-    }
+      },
+    },
   },
   password: {
     type: String,
     required: true,
     minlength: 8,
-    select: false
-  }
+    select: false,
+  },
 });
 
 module.exports = mongoose.model('user', userSchema);

@@ -2,13 +2,13 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const router = require('./routes');
 const { celebrate, Joi } = require('celebrate');
+const { errors } = require('celebrate');
+const router = require('./routes');
 const { login, createUser } = require('./controllers/users');
-const { BAD_REQUEST, AYTH_ERROR, NOT_FOUND, CONFLICT_ERROR, SERVER_ERROR,} = require('./utils/errorCodes');
+const { NOT_FOUND } = require('./utils/errorCodes');
 const auth = require('./middlewares/auth');
 const { avatarRegExp } = require('./utils/regexp');
-const { errors } = require('celebrate');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -49,17 +49,11 @@ app.use(router);
 
 app.use(errors());
 
-app.use((req, res) => {
-  res.status(NOT_FOUND).send({ message: 'Страница не найдена.' });
-});
+app.use((req, res) => res.status(NOT_FOUND).send({ message: 'Страница не найдена.' }));
 
 app.use((err, req, res, next) => {
-
-  if ( err.statusCode === 500 ) {
-    res.status(SERVER_ERROR).send({ message: 'Произошла ошибка на стороне сервера.' });
-    return;
-  }
-  res.status(err.statusCode).send({ message: err.message });
+  const { statusCode = 500, message } = err;
+  res.status(statusCode).send({ message: statusCode === 500 ? 'На сервере произошла ошибка' : message });
   next();
 });
 
