@@ -6,9 +6,9 @@ const { celebrate, Joi } = require('celebrate');
 const { errors } = require('celebrate');
 const router = require('./routes');
 const { login, createUser } = require('./controllers/users');
-const { NOT_FOUND } = require('./utils/errorCodes');
 const auth = require('./middlewares/auth');
 const { avatarRegExp } = require('./utils/regexp');
+const { NotFoundError } = require('./utils/errors/NotFoundError');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/signin', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
+    password: Joi.string().required(),
   }),
 }), login);
 
@@ -37,7 +37,7 @@ app.post('/signup', celebrate({
     about: Joi.string().min(2).max(30),
     avatar: Joi.string().pattern(avatarRegExp),
     email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
+    password: Joi.string().required(),
   }),
 }), createUser);
 
@@ -49,7 +49,9 @@ app.use(router);
 
 app.use(errors());
 
-app.use((req, res) => res.status(NOT_FOUND).send({ message: 'Страница не найдена.' }));
+app.use((req, res) => {
+  throw new NotFoundError('Страница не найдена.');
+});
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;

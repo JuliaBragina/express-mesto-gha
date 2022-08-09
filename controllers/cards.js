@@ -1,6 +1,8 @@
+const { request } = require('express');
 const Card = require('../models/card');
 const { ForbiddenError } = require('../utils/errors/ForbiddenError');
 const { NotFoundError } = require('../utils/errors/NotFoundError');
+const { BadRequestError } = require('../utils/errors/BadRequestError');
 
 const getCards = (req, res, next) => {
   Card.find({})
@@ -13,7 +15,12 @@ const createCard = (req, res, next) => {
   const owner = req.user.id;
   Card.create({ name, link, owner })
     .then((card) => res.status(201).send(card))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Переданы некорректные данные для создания карточки.'));
+      }
+      next(err);
+    });
 };
 
 const deleteCard = (req, res, next) => {
@@ -24,11 +31,11 @@ const deleteCard = (req, res, next) => {
         throw new NotFoundError('Нет карточки с таким id.');
       }
       if (card.owner.equals(req.user.id)) {
-        card.delete();
+        return card.delete()
+          .then(() => res.send({ message: 'Карточка удалена.' }));
       } else {
         throw new ForbiddenError('Нельзя удалять чужую карточку.');
       }
-      return res.send({ message: 'Карточка удалена.' });
     })
     .catch(next);
 };

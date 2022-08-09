@@ -45,6 +45,9 @@ const createUser = (req, res, next) => {
             next(new ConflictError('Пользователь с такими данными уже существует.'));
             return;
           }
+          if (err.name === 'ValidationError') {
+            next(new BadRequestError('Переданы некорректные данные для создания пользователя.'));
+          }
           next(err);
         });
     })
@@ -77,7 +80,13 @@ const updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(userId, { avatar }, { new: true })
     .then((user) => res.send(user))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Данные не прошли валидацию на сервере.'));
+        return;
+      }
+      next(err);
+    });
 };
 
 const login = (req, res, next) => {
@@ -92,7 +101,8 @@ const login = (req, res, next) => {
           return next(new UnauthorizedError('Неверные логин или пароль'));
         }
         const token = jwt.sign({ id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-        return res.cookie('jwt', token, { maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: true }).send(user);
+        return res.cookie('jwt', token, { maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: true })
+                  .send({ message: 'Вход выполнен.' });
       });
     })
     .catch(next);
