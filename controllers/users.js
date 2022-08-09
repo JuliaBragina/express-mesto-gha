@@ -102,7 +102,7 @@ const login = (req, res, next) => {
         }
         const token = jwt.sign({ id: user._id }, 'some-secret-key', { expiresIn: '7d' });
         return res.cookie('jwt', token, { maxAge: 3600000 * 24 * 7, httpOnly: true, sameSite: true })
-                  .send({ message: 'Вход выполнен.' });
+          .send({ message: 'Вход выполнен.' });
       });
     })
     .catch(next);

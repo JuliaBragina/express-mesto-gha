@@ -1,4 +1,3 @@
-const { request } = require('express');
 const Card = require('../models/card');
 const { ForbiddenError } = require('../utils/errors/ForbiddenError');
 const { NotFoundError } = require('../utils/errors/NotFoundError');
@@ -33,9 +32,8 @@ const deleteCard = (req, res, next) => {
       if (card.owner.equals(req.user.id)) {
         return card.delete()
           .then(() => res.send({ message: 'Карточка удалена.' }));
-      } else {
-        throw new ForbiddenError('Нельзя удалять чужую карточку.');
       }
+      throw new ForbiddenError('Нельзя удалять чужую карточку.');
     })
     .catch(next);
 };

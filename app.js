@@ -49,7 +49,7 @@ app.use(router);
 
 app.use(errors());
 
-app.use((req, res) => {
+app.use(() => {
   throw new NotFoundError('Страница не найдена.');
 });
 
