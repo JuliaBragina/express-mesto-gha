@@ -1,28 +1,42 @@
 [![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
-# Проект Mesto фронтенд + бэкенд
 
+# Проект Mesto backd-end
 
+## О проекте
 
-## Настройка бейджей статуса тестов
-Перед началом работы над проектом рекомендуется исправить бейджи, отражающие статус прохождения тестов.
-Для этого замените разметку бейджей на следующий фрагмент, подставив вместо `${имя_пользователя}` и `${имя_репозитория}` соответствующие значения.
+Данный проект - это back-end для сервиса Mesto, реализованный с помощью фреймворка Express.
 
-```
-[![Tests for sprint 13](https://github.com/${JuliaBragina}/${express-mesto-gha}/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/${JuliaBragina}/${express-mesto-gha}/actions/workflows/tests-13-sprint.yml) 
+## Описание
 
-[![Tests for sprint 14](https://github.com/${JuliaBragina}/${express-mesto-gha}/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/${JuliaBragina}/${express-mesto-gha}/actions/workflows/tests-14-sprint.yml)
-```
+В данном проекте отрабатывались следующие навыки: 
+- работа с базой данных MongoDB
+  - реализовано подключение к БД,
+  - создание схемы и модели пользователя и карточки, 
+- релизованы контроллеры и роуты для пользователей и карточек, 
+- реализована централизованная обработка ошибок,
+- защищены все маршруты, которым необходима авторизация,
+- валидация выполнена:
+  - с помощью Joi и celebrate,
+  - регулярными выражениями,
+  - модулем validator.
 
+Тестирование запросов выполнялось в Postman.
 
-## Директории
+## Стек: 
 
-`/routes` — папка с файлами роутера  
-`/controllers` — папка с файлами контроллеров пользователя и карточки   
-`/models` — папка с файлами описания схем пользователя и карточки  
-  
-Остальные директории вспомогательные, создаются при необходимости разработчиком
+- Express
+- Joi и celebrate
+- MongoDB
+- Postman
 
 ## Запуск проекта
 
 `npm run start` — запускает сервер   
 `npm run dev` — запускает сервер с hot-reload
+
+## Настройка бейджей статуса тестов
+```
+[![Tests for sprint 13](https://github.com/${JuliaBragina}/${express-mesto-gha}/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/${JuliaBragina}/${express-mesto-gha}/actions/workflows/tests-13-sprint.yml) 
+
+[![Tests for sprint 14](https://github.com/${JuliaBragina}/${express-mesto-gha}/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/${JuliaBragina}/${express-mesto-gha}/actions/workflows/tests-14-sprint.yml)
+```
