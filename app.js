@@ -9,6 +9,7 @@ const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const { avatarRegExp } = require('./utils/regexp');
 const { NotFoundError } = require('./utils/errors/NotFoundError');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -22,6 +23,8 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(requestLogger);
 
 // роуты, не требующие авторизации
 app.post('/signin', celebrate({
@@ -46,6 +49,8 @@ app.use(auth);
 
 // роуты, которым авторизация нужна
 app.use(router);
+
+app.use(errorLogger);
 
 app.use(errors());
 
